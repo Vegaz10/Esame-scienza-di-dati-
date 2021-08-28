@@ -1,0 +1,715 @@
+---
+title: "Esame"
+author: "Davide Puzzer"
+date: "11/8/2021"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## R Markdown
+
+This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+## Slide with Bullets
+
+- Bullet 1
+- Bullet 2
+- Bullet 3
+
+## Slide with R Output
+
+```{r cars, echo = TRUE}
+summary(cars)
+```
+
+## Slide with Plot
+
+```{r pressure}
+plot(pressure)
+```
+```{r}
+install.packages("tidyverse")
+install.packages("plotly")
+```
+
+#pacchetti
+```{r}
+library(dplyr)
+
+library(tidyverse)
+
+library(ggplot2)
+
+library(plotly)
+
+```
+
+#import
+```{r}
+campionato_costruttori <- read.table("C:/Users/david/Desktop/Università/Scienza dei dati/f1db_csv/constructor_results.csv",header=TRUE, stringsAsFactors=TRUE, sep=",", na.strings="NA", dec=".", strip.white=TRUE)
+
+constructors_standings <- read.table("C:/Users/david/Desktop/Università/Scienza dei dati/f1db_csv/constructor_standings.csv", header=TRUE, stringsAsFactors=TRUE, sep=",", na.strings="NA", dec=".", strip.white=TRUE)
+
+costruttori <- read.table("C:/Users/david/Desktop/Università/Scienza dei dati/f1db_csv/constructors.csv", header=TRUE, stringsAsFactors=TRUE, sep=",", na.strings="NA", dec=".", strip.white=TRUE)
+
+drivers_standings <- read.table("C:/Users/david/Desktop/Università/Scienza dei dati/f1db_csv/driver_standings.csv", header=TRUE, stringsAsFactors=TRUE, sep=",", na.strings="NA", dec=".", strip.white=TRUE)
+
+drivers <- read.table("C:/Users/david/Desktop/Università/Scienza dei dati/f1db_csv/drivers.csv", header=TRUE, stringsAsFactors=TRUE, sep=",", na.strings="NA", dec=".", strip.white=TRUE)
+
+lap_times <- read.table("C:/Users/david/Desktop/Università/Scienza dei dati/f1db_csv/lap_times.csv", header=TRUE, stringsAsFactors=TRUE, sep=",", na.strings="NA", dec=".", strip.white=TRUE)
+
+pitstops <- read.table("C:/Users/david/Desktop/Università/Scienza dei dati/f1db_csv/pit_stops.csv", header=TRUE, stringsAsFactors=TRUE, sep=",", na.strings="NA", dec=".", strip.white=TRUE)
+
+qualifiche <- read.table("C:/Users/david/Desktop/Università/Scienza dei dati/f1db_csv/qualifying.csv", header=TRUE, stringsAsFactors=TRUE, sep=",", na.strings="NA", dec=".", strip.white=TRUE)
+
+races <- read.table("C:/Users/david/Desktop/Università/Scienza dei dati/f1db_csv/races.csv", header=TRUE, stringsAsFactors=TRUE, sep=",", na.strings="NA", dec=".", strip.white=TRUE)
+
+risultati <- read.table("C:/Users/david/Desktop/Università/Scienza dei dati/f1db_csv/results.csv", header=TRUE, stringsAsFactors=TRUE, sep=",", na.strings="NA", dec=".", strip.white=TRUE)
+
+stagioni <- read.table("C:/Users/david/Desktop/Università/Scienza dei dati/f1db_csv/seasons.csv", header=TRUE, stringsAsFactors=TRUE, sep=",", na.strings="NA", dec=".", strip.white=TRUE)
+
+status <- read.table("C:/Users/david/Desktop/Università/Scienza dei dati/f1db_csv/status.csv", header=TRUE, stringsAsFactors=TRUE, sep=",", na.strings="NA", dec=".", strip.white=TRUE)
+
+
+```
+#area-test
+```{r}
+stagione_2018<-risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018) %>%
+	select(driverRef,position,points)
+
+
+```
+
+#variabili
+
+```{r}
+campionato_costruttori
+constructors_standings
+costruttori
+drivers_standings
+drivers
+lap_times
+pitstops
+qualifiche
+races
+risultati
+stagioni
+status
+
+piloti
+gare
+
+australia
+bahrain
+shanghai
+baku
+montmelo
+monaco
+canada
+francia
+redbullring
+silverstone
+hockenheimring
+hungaroring
+spa
+monza
+singapore
+sochi
+suzuka
+austin
+messico
+brasile
+yasmarina
+
+```
+
+#piloti
+```{r}
+piloti<-risultati %>% 
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018) %>%
+	slice(1:20) %>%
+	select(driverId,forename,driverRef,nationality)
+
+```
+
+#calendario
+```{r}
+gare<-races %>%
+	filter(year == 2018) %>%
+	select(circuitId,round,name,date,raceId)
+
+```
+
+#classifica_gara_per_gara
+```{r}
+australia<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 1) %>%
+	select(driverId,driverRef,position,points)
+
+bahrain<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 2) %>%
+	select(driverId,driverRef,position,points)
+
+shanghai<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 3) %>%
+	select(driverId,driverRef,position,points)
+
+baku<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 4) %>%
+	select(driverId,driverRef,position,points)
+
+montmelo<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 5) %>%
+	select(driverId,driverRef,position,points)
+
+monaco<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 6) %>%
+	select(driverId,driverRef,position,points)
+
+canada<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 7) %>%
+	select(driverId,driverRef,position,points)
+
+francia<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 8) %>%
+	select(driverId,driverRef,position,points)
+
+redbullring<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 9) %>%
+	select(driverId,driverRef,position,points)
+
+silverstone<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 10) %>%
+	select(driverId,driverRef,position,points)
+
+hockenheimring<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 11) %>%
+	select(driverId,driverRef,position,points)
+
+hungaroring<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 12) %>%
+	select(driverId,driverRef,position,points)
+
+spa<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 13) %>%
+	select(driverId,driverRef,position,points)
+
+monza<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 14) %>%
+	select(driverId,driverRef,position,points)
+
+singapore<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 15) %>%
+	select(driverId,driverRef,position,points)
+
+sochi<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 16) %>%
+	select(driverId,driverRef,position,points)
+
+suzuka<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 17) %>%
+	select(driverId,driverRef,position,points)
+
+austin<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 18) %>%
+	select(driverId,driverRef,position,points)
+
+messico<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 19) %>%
+	select(driverId,driverRef,position,points)
+
+brasile<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 20) %>%
+	select(driverId,driverRef,position,points)
+
+yasmarina<- risultati %>%
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018, round == 21) %>%
+	select(driverId,driverRef,position,points)
+```
+
+```{r}
+lewis<- risultati %>%
+  inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+  filter(driverId == 1 , year == 2018) %>%
+  select(name,position,points,round)
+lewis
+
+
+```
+
+#plot andamento di Lewis Hamilton
+```{r}
+ggplot(data=lewis,mapping=aes(x=round , y=reorder(position,desc(position)) , color=position)) +
+  geom_point(mapping=aes(size=points))
+ 
+```
+```{r}
+ggplot(data=lewis,mapping=aes(x=round , y=position , color=position)) +
+  geom_point(mapping=aes(size=points)) +
+  geom_line(size=1.15) +
+  scale_y_continuous(trans = "reverse", breaks=unique(lewis$position))
+```
+#test lewis
+```{r}
+test_lewis<-ggplot(data=lewis,mapping=aes(reorder(name ,round), y=position)) +
+  geom_point(size=6,color=lewis$position) +
+  scale_y_continuous(trans = "reverse", breaks=unique(lewis$position)) +
+  geom_text(data=lewis,label=posizioncine,color="white") 
+  #geom_text()
+  
+print(test_lewis +
+        ggtitle("Stagione 2018 Lewis Hamilton #44") +
+        labs(y="Posizione al traguardo",x="Gare"))
+```
+
+#dati Sebastian Vettel
+```{r}
+sebastian<- risultati %>%
+  inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+  filter(driverId == 20 , year == 2018) %>%
+  select(name,position,points,round)
+sebastian
+```
+#plotting sebastian vettel
+```{r}
+ggplot(data=sebastian,mapping=aes(x=round , y=position , color=position)) +
+  geom_point(mapping=aes(size=points)) +
+  geom_line(size=1.15) +
+  scale_y_continuous(trans = "reverse", breaks=unique(sebastian$position))
+```
+```{r}
+test_seby<-ggplot(data=sebastian,mapping=aes(reorder(name ,round), y=position)) +
+  geom_point(size=6,color=sebastian$position) +
+  scale_y_continuous(trans = "reverse", breaks=unique(sebastian$position)) +
+  geom_text(data=sebastian,label=posizioncine_seby,color="white") 
+  #geom_text()
+  
+print(test_seby +
+        ggtitle("Stagione 2018 Sebastian Vettel #5") +
+        labs(y="Posizione al traguardo",x="Gare"))
+```
+#tempi Hockenheimring 2018
+```{r}
+tempi_seb<-lap_times %>% 
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018,raceId == 999,driverRef == "vettel")
+  #select(lap,time.x,position)
+
+tempi_lewis<-lap_times %>% 
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018,raceId == 999,driverRef == "hamilton")
+  #select(lap,time.x,position)
+
+pitlewis<- pitstops %>%
+    inner_join(drivers,by="driverId") %>%
+    inner_join(races,by="raceId") %>%
+  filter(year == 2018,raceId == 999,driverRef == "hamilton")
+
+pitseby<- pitstops %>%
+    inner_join(drivers,by="driverId") %>%
+    inner_join(races,by="raceId") %>%
+  filter(year == 2018,raceId == 999,driverRef == "vettel")
+```
+
+
+```{r}
+#seby_time$time.x<-as.numeric(as.character(seby_time$time.x))
+
+seby_time<-ggplot(tempi_seb,aes(lap,milliseconds)) + 
+  geom_point() +
+  geom_line(color="red")+
+  scale_y_continuous(breaks = c(80000, 84000, 88000,92000), labels = c("1:20:000", "1:24:000","1:28:000","1:32:000"))
+  
+  
+seby_time +
+  ggtitle("Tempi sul giro Hockenheimring 2018 Sebastian Vettel #5") +
+  xlab("Giro") + 
+  ylab("Tempi sul giro")
+
+fig<-ggplotly(seby_time)
+fig
+```
+#tempi Lewis Hamilton
+```{r}
+lewis_time<-ggplot(tempi_lewis,aes(lap,milliseconds),color=position) + 
+  geom_point() +
+  geom_line(color="green") +
+  scale_y_continuous(breaks = c(80000,100000,120000,140000), labels = c("1:20:000", "1:40:000","2:00:000","2:20:000"))
+  #stat_summary(fun.y=sum,geom="line")
+  
+lewis_time +
+  ggtitle("Tempi sul giro Hockenheimring 2018 Lewis Hamilton #44") +
+  xlab("Giro") + 
+  ylab("Tempi sul giro")
+
+fig<-ggplotly(lewis_time)
+fig
+```
+
+#area test
+```{r}
+ggplot(tempi_seb,aes(milliseconds,lap))+
+  geom_line(stat="identity")
+```
+```{r}
+t<-lap_times %>% 
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018,raceId == 999,driverRef == "vettel") %>%
+  select(milliseconds)
+l<-lap_times %>% 
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018,raceId == 999,driverRef == "vettel") %>%
+  select(lap)
+
+as.vector(t)
+as.vector(l)
+
+lol<-data.frame(l,t)
+
+plot(lol,type="b",pch=19,col="red",xlab="Giri",ylab="Tempi")
+#axis(side=1,at=t)
+#axis(side=2,at=l)
+box()
+```
+
+#campionato costruttori
+```{r}
+
+mercedes <- costruttori %>%
+  filter(constructorRef == "mercedes")
+
+ferrari <- costruttori %>%
+  filter(constructorRef == "ferrari")
+
+costr_2018_ferrari <- constructors_standings %>% 
+	inner_join(costruttori,by="constructorId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018,constructorRef == "ferrari")
+
+costr_2018_mercedes <- constructors_standings %>% 
+	inner_join(costruttori,by="constructorId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018,constructorRef == "mercedes")
+
+```
+
+#grafico ferrari
+```{r}
+costruttoriferrari<-ggplot(costr_2018_ferrari,aes(reorder(name.y ,points), points))+
+  geom_bar(stat="identity",fill="red")
+costruttoriferrari
+```
+#grafico mercedes
+```{r}
+costruttorimercedes<-ggplot(costr_2018_mercedes,aes(reorder(name.y ,points), points))+
+  geom_bar(stat="identity",fill="green")
+costruttorimercedes
+```
+```{r}
+bigs<- constructors_standings %>% 
+	inner_join(costruttori,by="constructorId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018,constructorRef == c("ferrari","mercedes"))
+```
+
+```{r}
+plotbigs<-ggplot(data=bigs)+
+  geom_bar(
+    aes(reorder(name.y ,points), points ,fill=Costruttori),
+    position="dodge",
+    stat="identity"
+  )
+plotbigs +
+  ggtitle("Campionato costruttori Scuderia Ferrari - Mercedes AMG Petronas 2018") +
+  xlab("Gare") + 
+  ylab("Punti") +
+  theme(plot.title = element_text(color = "blue", size = 12, face = "italic"))
+
+  
+  
+plotbigs
+```
+#monza 2018
+```{r}
+tempi_kimi<-lap_times %>% 
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018,raceId == 1002,driverRef == "raikkonen")
+
+tempi_ham<-lap_times %>% 
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018,raceId == 1002,driverRef == "hamilton")
+
+tempi_misto<-lap_times %>% 
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018,raceId == 1002,driverRef == c("hamilton","raikkonen"))
+```
+
+```{r}
+kimi_time<-ggplot(tempi_kimi,aes(lap,milliseconds)) + 
+  geom_point() +
+  geom_line(color="red")+
+  scale_y_continuous(breaks = c(90000, 100000,110000,120000,130000,140000),
+                     labels = c("1:30:000", "1:40:000","1:50:000","2:00:000","2:10:000","2:20:000"))
+  
+  
+kimi_time +
+  ggtitle("Tempi sul giro Monza 2018 Kimi Raikkonen #7") +
+  xlab("Giro") + 
+  ylab("Tempi sul giro")
+
+#figura<-ggplotly(kimi_time)
+#figura
+```
+```{r}
+ham_time<-ggplot(tempi_ham,aes(lap,milliseconds)) + 
+  geom_point() +
+  geom_line(color="green")+
+  scale_y_continuous(breaks = c(80000, 90000, 100000,110000,120000,130000,140000),
+                     labels = c("1:20:00","1:30:000", "1:40:000","1:50:000","2:00:000","2:10:000","2:20:000"))
+  
+  
+ham_time +
+  ggtitle("Tempi sul giro Monza 2018 Lewis Hamilton #44") +
+  xlab("Giro") + 
+  ylab("Tempi sul giro")
+```
+
+#test
+```{r}
+mista<-ggplot(data=tempi_misto)+
+  geom_line(
+    aes(lap, milliseconds ,fill=number),
+    color=tempi_misto$number,size=1.20,position="dodge",
+    stat="identity")+
+  scale_y_continuous(breaks = c(80000, 90000, 100000,110000,120000,130000,140000),
+                     labels = c("1:20:00","1:30:000", "1:40:000","1:50:000","2:00:000","2:10:000","2:20:000"))+
+  scale_colour_manual(name="Piloti",values=tempi_misto$number)
+  
+mista +
+  ggtitle("Confronto Hamilton-Raikkonen Monza 2018") +
+  xlab("Giri") + 
+  ylab("Tempi") +
+  theme(plot.title = element_text(color = "blue", size = 12, face = "italic"))
+```
+```{r}
+monza<-ggplot(data=tempi_monza,mapping=aes(lap,milliseconds,color=Pilota))+
+  geom_line(bindwidth=0.1,stat="identity",size=1.10)+
+  scale_y_continuous(breaks = c(80000, 90000, 100000,110000,120000,130000,140000),
+                     labels = c("1:20:00","1:30:000", "1:40:000","1:50:000","2:00:000","2:10:000","2:20:000"))+
+geom_point()
+
+  monza+
+    scale_color_manual(values=c("aquamarine3","Red"))+
+    ggtitle("Confronto Hamilton-Raikkonen Monza 2018") +
+  xlab("Giri") + 
+  ylab("Tempi") +
+  theme(plot.title = element_text(color = "blue", size = 12, face = "italic"))
+```
+#Austin 2018
+
+```{r}
+tempi_austin_kimi<-lap_times %>% 
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018,raceId == 1006,driverRef == c("raikkonen"))
+tempi_austin_lewis<-lap_times %>% 
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018,raceId == 1006,driverRef == c("hamilton"))
+tempi_austin_max<-lap_times %>% 
+	inner_join(drivers,by="driverId") %>%
+	inner_join(races,by="raceId") %>%
+	filter(year == 2018,raceId == 1006,driverRef == c("max_verstappen"))
+
+tempi_austin <- rbind(tempi_austin_kimi,tempi_austin_lewis,tempi_austin_max)
+
+```
+
+```{r}
+austin<-ggplot(data=tempi_austin,mapping=aes(lap,milliseconds,color=Pilota))+
+  geom_line(bindwidth=0.1,stat="identity",size=1.10)+
+  scale_y_continuous(breaks = c(100000,110000,120000,130000,140000),
+                     labels = c("1:40:000","1:50:000","2:00:000","2:10:000","2:20:000"))+
+  geom_point()
+
+  austin+
+    scale_color_manual(values=c("aquamarine3","Red","blue"))+
+    ggtitle("Confronto Hamilton-Raikkonen-Verstappen Austin 2018") +
+  xlab("Giri") + 
+  ylab("Tempi") +
+  theme(plot.title = element_text(color = "blue", size = 12, face = "italic"))
+```
+```{r}
+pitkimilewis<- pitstops %>%
+    inner_join(drivers,by="driverId") %>%
+    inner_join(races,by="raceId") %>%
+  filter(year == 2018,raceId == 1006,driverRef == c("raikkonen"))
+```
+
+
+#revisione hockenheim
+```{r}
+tempi_hock <- rbind(tempi_lewis,tempi_seb)
+```
+
+```{r}
+hock<-ggplot(data=tempi_hock,mapping=aes(lap,milliseconds,color=Pilota))+
+  geom_line(bindwidth=0.1,stat="identity",size=1.10)+
+  scale_y_continuous(breaks = c(80000,100000,120000,140000),
+                     labels = c("1:20:000","1:40:000","2:00:000","2:20:000"))+
+  geom_point()
+
+  hock+
+    scale_color_manual(values=c("aquamarine3","Red"))+
+    ggtitle("Confronto Sebastian Vettel - Lewis Hamilton Hockenheimring 2018") +
+  xlab("Giri") + 
+  ylab("Tempi") +
+  theme(plot.title = element_text(color = "blue", size = 12, face = "italic"))
+```
+#revisione monza
+```{r}
+tempi_monza <- rbind(tempi_kimi,tempi_ham)
+```
+
+#tutti i pitsotops
+```{r}
+#hock
+pitlewishock<- pitstops %>%
+    inner_join(drivers,by="driverId") %>%
+    inner_join(races,by="raceId") %>%
+  filter(year == 2018,raceId == 999,driverRef == "hamilton")
+
+pitsebyhock<- pitstops %>%
+    inner_join(drivers,by="driverId") %>%
+    inner_join(races,by="raceId") %>%
+  filter(year == 2018,raceId == 999,driverRef == "vettel")
+
+polechock<- qualifiche %>%
+  inner_join(drivers,by="driverId") %>%
+  inner_join(races,by="raceId") %>%
+  filter(year == 2018,raceId == 999)
+
+#monza
+
+pitlewismonza<- pitstops %>%
+    inner_join(drivers,by="driverId") %>%
+    inner_join(races,by="raceId") %>%
+  filter(year == 2018,raceId == 1002,driverRef == "hamilton")
+
+pitkimimonza<- pitstops %>%
+    inner_join(drivers,by="driverId") %>%
+    inner_join(races,by="raceId") %>%
+  filter(year == 2018,raceId == 1002,driverRef == "raikkonen")
+
+polemonza<- qualifiche %>%
+  inner_join(drivers,by="driverId") %>%
+  inner_join(races,by="raceId") %>%
+  filter(year == 2018,raceId == 1002)
+
+#austin
+
+pitlewisaustin<- pitstops %>%
+    inner_join(drivers,by="driverId") %>%
+    inner_join(races,by="raceId") %>%
+  filter(year == 2018,raceId == 1006,driverRef == "hamilton")
+
+pitkimiaustin<- pitstops %>%
+    inner_join(drivers,by="driverId") %>%
+    inner_join(races,by="raceId") %>%
+  filter(year == 2018,raceId == 1006,driverRef == "raikkonen")
+
+pitverstappenaustin<- pitstops %>%
+    inner_join(drivers,by="driverId") %>%
+    inner_join(races,by="raceId") %>%
+  filter(year == 2018,raceId == 1006,driverRef == "max_verstappen")
+
+poleaustin<- qualifiche %>%
+  inner_join(drivers,by="driverId") %>%
+  inner_join(races,by="raceId") %>%
+  filter(year == 2018,raceId == 1006)
+
+
+
+hock<- races %>%
+  filter(year == 2018,raceId == 999 )
+mo<-races %>%
+  filter(year == 2018,raceId == 1002)
+au<-races %>%
+  filter(year == 2018,raceId == 1006)
+
+pitlewishock
+pitsebyhock
+
+pitlewismonza
+pitkimimonza
+
+pitlewisaustin
+pitkimiaustin
+pitverstappenaustin
+
+hock
+mo
+au
+```
+

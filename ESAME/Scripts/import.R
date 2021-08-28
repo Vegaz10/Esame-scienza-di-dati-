@@ -1,0 +1,12 @@
+campionato_costruttori
+constructors_standings
+costruttori
+drivers_standings
+drivers
+lap_times
+pitstops
+qualifiche
+races
+risultati
+stagioni
+status
